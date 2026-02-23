@@ -22,7 +22,7 @@ By the end of this project, I successfully:
 - Connected VS Code to EC2 using Remote - SSH
 - Edited application files using both an IDE and nano (terminal)
 
-(INSERT IMAGE HERE: Final architecture overview)
+<img width="682" height="256" alt="image" src="https://github.com/user-attachments/assets/999c7c56-b8c1-4a7f-879c-39ff6b46f3f2" />
 
 ---
 
@@ -50,7 +50,7 @@ A key pair consists of:
 
 I moved the .pem file into a DevOps folder on my Desktop.
 
-v
+<img width="511" height="373" alt="Screenshot 2026-02-22 at 10 09 49 PM" src="https://github.com/user-attachments/assets/3b521663-6251-48b4-bdd2-37bde618f7b3" />
 
 This private key is required to securely SSH into the EC2 instance.
 
@@ -75,7 +75,8 @@ chmod 400 nextwork-keypair.pem
 
 This prevents other users from accessing the key and is required for SSH to accept it.
 
-(INSERT IMAGE HERE: chmod command output)
+<img width="721" height="149" alt="image" src="https://github.com/user-attachments/assets/99dce499-0ccf-40c8-9f92-46d1641d6ea7" />
+
 
 ---
 
@@ -95,7 +96,8 @@ I verified connection when the terminal changed to:
 ec2-user@<your-instance>
 ```
 
-(INSERT IMAGE HERE: Successful SSH connection)
+<img width="782" height="263" alt="image" src="https://github.com/user-attachments/assets/e5261a59-8789-4afb-a7e8-9be3ab179eed" />
+
 
 ---
 
@@ -134,7 +136,8 @@ Verify installation:
 mvn -v
 ```
 
-(INSERT IMAGE HERE: mvn -v output)
+<img width="758" height="468" alt="image" src="https://github.com/user-attachments/assets/bf3a473c-548b-4b12-bf85-6a38e6325e9a" />
+
 
 ---
 
@@ -160,9 +163,6 @@ Verify installation:
 ```bash
 java -version
 ```
-
-(INSERT IMAGE HERE: java -version output)
-
 ---
 
 # Step 7 — Generate the Java Web Application
@@ -182,8 +182,6 @@ When successful, Maven displayed:
 ```
 BUILD SUCCESS
 ```
-
-(INSERT IMAGE HERE: BUILD SUCCESS output)
 
 The project was created in:
 
@@ -211,7 +209,8 @@ Then I opened the folder:
 /home/ec2-user/nextwork-web-project
 ```
 
-(INSERT IMAGE HERE: VS Code connected to EC2)
+<img width="769" height="331" alt="image" src="https://github.com/user-attachments/assets/2095213a-05cf-4f78-8bf1-3ec273f66466" />
+
 
 ---
 
@@ -240,7 +239,7 @@ Saved using:
 Command + S
 ```
 
-(INSERT IMAGE HERE: Modified index.jsp)
+<img width="665" height="308" alt="image" src="https://github.com/user-attachments/assets/50ceb105-674f-48fc-bb46-0f89acc79a85" />
 
 ---
 
@@ -274,7 +273,8 @@ Exited with:
 Ctrl + X
 ```
 
-(INSERT IMAGE HERE: nano editor screenshot)
+<img width="722" height="428" alt="Screenshot 2026-02-22 at 10 13 38 PM" src="https://github.com/user-attachments/assets/11f6170c-e44f-4f44-944e-d92a0e3a7db5" />
+
 
 ---
 
@@ -284,7 +284,6 @@ I switched back to the VS Code Remote - SSH window and confirmed that the new li
 
 This demonstrated that both nano and VS Code were editing the same EC2 instance files in real time.
 
-(INSERT IMAGE HERE: Verified update in VS Code)
 
 ---
 
@@ -311,10 +310,6 @@ Before automation (CodeBuild, CodeDeploy, CodePipeline), I now fully understand:
 - How it is built
 - How dependencies are managed
 - How files are edited and updated on a server
-
-In Part 2, I will connect this application to GitHub and begin automating the workflow.
-
-(INSERT IMAGE HERE: Part 2 preview diagram)
 
 ---
 
