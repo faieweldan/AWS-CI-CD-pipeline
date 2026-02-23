@@ -1,0 +1,327 @@
+# Part 1 — Set Up a Web App in the Cloud (EC2 + VS Code + Maven + Java)
+
+> 6 Day DevOps Challenge — Day 1  
+> Building the foundation for a CI/CD pipeline
+
+---
+
+# Overview
+
+In this project, I set up a Java web application entirely in the cloud using Amazon EC2.
+
+This is Part 1 of a 6-day DevOps challenge where the final goal is to build a complete CI/CD pipeline.  
+Before automation, I first needed a working cloud-hosted application.
+
+By the end of this project, I successfully:
+
+- Launched and secured an EC2 instance
+- Connected via SSH using a key pair
+- Installed Apache Maven
+- Installed Amazon Corretto 8 (Java 8)
+- Generated a Java web application using Maven
+- Connected VS Code to EC2 using Remote - SSH
+- Edited application files using both an IDE and nano (terminal)
+
+(INSERT IMAGE HERE: Final architecture overview)
+
+---
+
+# Step 1 — Launch an EC2 Instance
+
+I launched an Amazon Linux 2023 EC2 instance to act as my cloud development server.
+
+Why?
+Because the goal is to build and run everything in the cloud, not locally.
+
+Key configurations:
+- Instance type: t2.micro / t3.micro
+- Created a new RSA key pair (.pem)
+- Allowed SSH (port 22) from My IP
+
+---
+
+# Step 2 — Set Up Key Pair and Secure Access
+
+When creating the instance, AWS generated a key pair.
+
+A key pair consists of:
+- A public key (stored in AWS)
+- A private key (.pem file downloaded to my computer)
+
+I moved the .pem file into a DevOps folder on my Desktop.
+
+v
+
+This private key is required to securely SSH into the EC2 instance.
+
+---
+
+# Step 3 — Set Up VS Code and Prepare SSH
+
+I opened VS Code and launched a terminal.
+
+First, I navigated to the folder containing my key file:
+
+```bash
+cd ~/Desktop/DevOps
+ls
+```
+
+Then I secured the private key by updating its permissions:
+
+```bash
+chmod 400 nextwork-keypair.pem
+```
+
+This prevents other users from accessing the key and is required for SSH to accept it.
+
+(INSERT IMAGE HERE: chmod command output)
+
+---
+
+# Step 4 — Connect to EC2 via SSH
+
+I connected to the EC2 instance using its Public IPv4 DNS:
+
+```bash
+ssh -i ~/Desktop/DevOps/nextwork-keypair.pem ec2-user@<YOUR_PUBLIC_IPV4_DNS>
+```
+
+After accepting the fingerprint, I successfully entered the EC2 instance.
+
+I verified connection when the terminal changed to:
+
+```
+ec2-user@<your-instance>
+```
+
+(INSERT IMAGE HERE: Successful SSH connection)
+
+---
+
+# Step 5 — Install Apache Maven
+
+## What is Maven?
+
+Apache Maven is a build tool and dependency manager for Java applications.
+
+It:
+- Compiles code
+- Downloads dependencies
+- Packages applications
+- Generates starter project templates (archetypes)
+
+Maven must be installed inside the EC2 instance because the project is built in the cloud.
+
+## Install Maven
+
+```bash
+wget https://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+sudo tar -xzf apache-maven-3.5.2-bin.tar.gz -C /opt
+echo "export PATH=/opt/apache-maven-3.5.2/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
+```
+
+If wget was missing:
+
+```bash
+sudo yum install wget -y
+```
+
+Verify installation:
+
+```bash
+mvn -v
+```
+
+(INSERT IMAGE HERE: mvn -v output)
+
+---
+
+# Step 6 — Install Amazon Corretto 8 (Java 8)
+
+## Why Java?
+
+Maven requires Java to run.  
+Without Java installed, Maven cannot function.
+
+Amazon Corretto 8 is AWS’s distribution of Java 8.
+
+## Install Java
+
+```bash
+sudo dnf install -y java-1.8.0-amazon-corretto-devel
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto.x86_64
+export PATH=/usr/lib/jvm/java-1.8.0-amazon-corretto.x86_64/jre/bin/:$PATH
+```
+
+Verify installation:
+
+```bash
+java -version
+```
+
+(INSERT IMAGE HERE: java -version output)
+
+---
+
+# Step 7 — Generate the Java Web Application
+
+Using Maven’s webapp archetype, I generated a starter project:
+
+```bash
+mvn archetype:generate \
+  -DgroupId=com.nextwork.app \
+  -DartifactId=nextwork-web-project \
+  -DarchetypeArtifactId=maven-archetype-webapp \
+  -DinteractiveMode=false
+```
+
+When successful, Maven displayed:
+
+```
+BUILD SUCCESS
+```
+
+(INSERT IMAGE HERE: BUILD SUCCESS output)
+
+The project was created in:
+
+```
+/home/ec2-user/nextwork-web-project
+```
+
+---
+
+# Step 8 — Connect VS Code to EC2 (Remote - SSH)
+
+SSH via terminal allows command execution, but to edit files comfortably, I installed:
+
+**VS Code Remote - SSH extension**
+
+I added a new SSH host using:
+
+```
+ssh -i ~/Desktop/DevOps/nextwork-keypair.pem ec2-user@<YOUR_PUBLIC_IPV4_DNS>
+```
+
+Then I opened the folder:
+
+```
+/home/ec2-user/nextwork-web-project
+```
+
+(INSERT IMAGE HERE: VS Code connected to EC2)
+
+---
+
+# Step 9 — Modify index.jsp Using VS Code
+
+Inside:
+
+```
+src/main/webapp/index.jsp
+```
+
+I modified the file to:
+
+```html
+<html>
+<body>
+<h2>Hello [Your Name]!</h2>
+<p>This is my NextWork web application working!</p>
+</body>
+</html>
+```
+
+Saved using:
+
+```
+Command + S
+```
+
+(INSERT IMAGE HERE: Modified index.jsp)
+
+---
+
+# Secret Mission — Edit Using nano (Terminal Editor)
+
+To understand editing without an IDE, I navigated to the file location:
+
+```bash
+cd ~/nextwork-web-project/src/main/webapp
+```
+
+Then opened the file:
+
+```bash
+nano index.jsp
+```
+
+I added:
+
+```html
+<p>I am writing this line using nano instead of an IDE.</p>
+```
+
+Saved with:
+```
+Ctrl + O
+```
+
+Exited with:
+```
+Ctrl + X
+```
+
+(INSERT IMAGE HERE: nano editor screenshot)
+
+---
+
+# Verifying Changes
+
+I switched back to the VS Code Remote - SSH window and confirmed that the new line appeared instantly.
+
+This demonstrated that both nano and VS Code were editing the same EC2 instance files in real time.
+
+(INSERT IMAGE HERE: Verified update in VS Code)
+
+---
+
+# Key Concepts Learned
+
+- EC2 provisioning
+- SSH authentication using key pairs
+- Linux file permissions (`chmod 400`)
+- Installing software in cloud environments
+- Maven build lifecycle
+- Java runtime configuration
+- Remote development using VS Code
+- Terminal-based file editing with nano
+
+---
+
+# Reflection
+
+This project established the foundation for the CI/CD pipeline.
+
+Before automation (CodeBuild, CodeDeploy, CodePipeline), I now fully understand:
+
+- Where the application lives
+- How it is built
+- How dependencies are managed
+- How files are edited and updated on a server
+
+In Part 2, I will connect this application to GitHub and begin automating the workflow.
+
+(INSERT IMAGE HERE: Part 2 preview diagram)
+
+---
+
+# Clean Up (Important)
+
+To avoid AWS charges, I terminated the EC2 instance after completion.
+
+Resources deleted:
+- EC2 instance
+- Key pair (optional)
