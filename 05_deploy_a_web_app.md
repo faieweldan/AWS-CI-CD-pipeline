@@ -315,6 +315,9 @@ Error:
 
 ScriptFailed — command not found
 
+<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/98b44037-117e-49af-918e-f2d059e2c060" />
+
+
 ---
 
 # Step 12 — Observe Rollback Behavior
