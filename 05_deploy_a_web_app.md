@@ -69,6 +69,9 @@ Why CloudFormation?
 
 Stack reached: ✅ CREATE_COMPLETE
 
+<img width="763" height="468" alt="image" src="https://github.com/user-attachments/assets/5385d0a9-02ca-4a8c-9f4c-6d7b4cd4b0ba" />
+
+
 ---
 
 # Step 2 — Prepare Deployment Scripts
@@ -106,6 +109,9 @@ Ensure application runs after deployment.
 Purpose:
 Prevent file conflicts during redeployment.
 
+<img width="698" height="374" alt="image" src="https://github.com/user-attachments/assets/dd433c54-fadd-4628-8b1c-b0a7604cb8ab" />
+
+
 ---
 
 # Step 3 — Create appspec.yml
@@ -139,6 +145,9 @@ This file tells CodeDeploy:
 - Which scripts to run
 - In what order
 - With which permissions
+
+<img width="667" height="457" alt="image" src="https://github.com/user-attachments/assets/40e7b18c-e512-400a-8d09-6b8dab9be28d" />
+
 
 ---
 
@@ -178,6 +187,9 @@ Application Name:
 
 Compute platform:
 EC2/On-premises
+
+<img width="757" height="456" alt="image" src="https://github.com/user-attachments/assets/2703053d-de04-4d16-bdd3-ca46bec42de5" />
+
 
 ---
 
@@ -224,6 +236,8 @@ Deployment lifecycle executed:
 Result:
 
 ❌ Deployment failed
+<img width="762" height="469" alt="image" src="https://github.com/user-attachments/assets/9ca2d223-62e2-4d23-b2ab-f17c6179032c" />
+
 
 ---
 
@@ -271,6 +285,9 @@ Accessed EC2 Public IPv4 DNS via HTTP.
 Application loaded successfully.
 
 Continuous Deployment pipeline operational.
+
+<img width="790" height="404" alt="image" src="https://github.com/user-attachments/assets/77daf9ec-c533-4af7-9f00-485b6c0170d1" />
+
 
 ---
 
