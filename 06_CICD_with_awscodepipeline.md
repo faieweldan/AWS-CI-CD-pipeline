@@ -258,8 +258,6 @@ Pipeline stage commit IDs can be correct, but deployment failures may still be c
 - deployment cache/state on host
 - inability to access the instance for validation
 
-<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/57ad26f1-eebc-4a89-a37c-1fe2acb0fca6" />
-<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/5df94e8c-4062-48fe-83ff-82cb0d1c5a6f" />
 
 ---
 
@@ -280,9 +278,6 @@ I updated the deployment EC2 CloudFormation template to include:
 - Replaced/updated the deployment EC2 in a controlled way
 - Made the instance accessible for SSH if needed later
 
-<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/0d2b5f76-5c36-4711-b6b9-d7a9f5f98f7b" />
-<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/6e5cb0f7-0a34-4102-a2c9-e74b1d36bfe8" />
-
 ---
 
 # Step 12 — Rerun Pipeline After Infrastructure Fix
@@ -300,8 +295,6 @@ After the CloudFormation stack update completed:
 - Deploy stage: ✅ Success
 
 The deployment succeeded after the infrastructure fix and rerun.
-
-<img width="684" height="247" alt="image" src="https://github.com/user-attachments/assets/bf218461-7376-45f3-a1cd-cfbd5e44d2bd" />
 
 ---
 
@@ -321,7 +314,6 @@ This confirmed the full pipeline worked end-to-end:
 
 **GitHub push → CodePipeline → CodeBuild → CodeDeploy → EC2 update**
 
-<img width="790" height="404" alt="image" src="https://github.com/user-attachments/assets/77daf9ec-c533-4af7-9f00-485b6c0170d1" />
 
 ---
 
@@ -372,7 +364,105 @@ To confirm the rollback really worked, I refreshed the same web app URL (same EC
 ### Expected behavior after rollback
 The extra line added earlier to `index.jsp` was no longer visible:
 
-```html
 <p>If you see this line, that means your latest changes are automatically deployed into production by CodePipeline!</p>
 
+
+### Result
+
+The web app returned to the previous version successfully ✅
+
+This confirmed that the rollback reverted the deployed application version on the server.
+
+---
+
+# Issues Encountered and How I Solved Them
+
+## 1) GitHub connection / repository selection issues in CodePipeline
+
+### Problem
+While configuring the Source stage, the GitHub repository was not found / validation complained about repository format.
+
+### Fix
+- Recreated/updated the GitHub connection (CodeConnections)
+- Used the correct repository ID format:
+  - `<account>/<repository-name>`
+- Re-authorized the AWS GitHub connector for the correct repo
+
+---
+
+## 2) CodePipeline Deploy stage failed with old `stop_server.sh` behavior
+
+### Problem
+Deploy stage failed during `ApplicationStop` because `systemctll` typo was still being executed, even though GitHub commit showed the typo was fixed.
+
+### Fix
+- Investigated CodeDeploy lifecycle logs
+- Identified target instance access issue (no key pair / EC2 connect failed)
+- Updated CloudFormation stack to add:
+  - Key pair support
+  - SSH access (port 22 from My IP)
+- Replaced/updated deployment EC2 via stack update
+- Reran pipeline (`Release change`)
+
+### Result
+✅ Deploy stage succeeded
+
+---
+
+## 3) Could not SSH into deployment EC2
+
+### Problem
+Deployment EC2 created by CloudFormation had no key pair assigned, and EC2 Instance Connect was failing.
+
+### Fix
+- Modified CloudFormation template to accept `KeyPairName`
+- Added `KeyName: !Ref KeyPairName` in EC2 resource
+- Added SSH ingress rule to security group
+- Updated stack instead of manually recreating resources
+
+---
+
+# Final Result
+
+✔ Built a full CI/CD orchestration pipeline with CodePipeline  
+✔ Connected GitHub, CodeBuild, and CodeDeploy into one workflow  
+✔ Enabled automatic webhook-triggered pipeline runs on push  
+✔ Configured deploy-stage rollback behavior  
+✔ Diagnosed deploy failure from CodeDeploy lifecycle logs  
+✔ Fixed infrastructure access issue through CloudFormation stack update  
+✔ Successfully reran pipeline and deployed latest code to EC2  
+✔ Manually triggered and verified a Deploy-stage rollback in CodePipeline  
+
+---
+
+# Key DevOps Concepts Practiced
+
+- CI/CD pipeline orchestration
+- Event-driven automation with GitHub webhooks
+- Source → Build → Deploy artifact flow
+- CodePipeline execution modes (`SUPERSEDED`)
+- CodeDeploy lifecycle hook troubleshooting
+- Deployment-stage rollback behavior
+- Manual rollback operations in CodePipeline
+- Infrastructure as Code remediation (CloudFormation update)
+- Safe troubleshooting without tearing down the whole environment
+- Separation of development EC2 vs deployment EC2 roles
+
+---
+
+# Reflection
+
+This project tied together all previous services into a real CI/CD workflow.
+
+What I learned most:
+
+- A pipeline can show the correct commit in Source/Build, but deploy issues can still come from the target instance state
+- Infrastructure access (SSH / key pair / security group) is critical for debugging deployments
+- CloudFormation updates are safer and cleaner than manually patching resources
+- Deploy-stage rollback in CodePipeline is a powerful recovery tool when source/build are still valid
+- CI/CD is not just “automation” — it’s also operational troubleshooting and recovery
+
+This project completed the progression from:
+
+Manual setup → CI build automation → CD deployment → Fully orchestrated CI/CD pipeline with recovery thinking
 
