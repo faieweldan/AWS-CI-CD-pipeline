@@ -258,6 +258,11 @@ Pipeline stage commit IDs can be correct, but deployment failures may still be c
 - deployment cache/state on host
 - inability to access the instance for validation
 
+<img width="1090" height="648" alt="image" src="https://github.com/user-attachments/assets/e1e1e56d-aca8-40ea-95c6-a91185ff72e5" />
+<img width="1101" height="537" alt="image" src="https://github.com/user-attachments/assets/fbb22ba5-62dc-4f59-8c2e-9fd65078df91" />
+
+
+
 
 ---
 
@@ -278,6 +283,12 @@ I updated the deployment EC2 CloudFormation template to include:
 - Replaced/updated the deployment EC2 in a controlled way
 - Made the instance accessible for SSH if needed later
 
+<img width="1101" height="666" alt="image" src="https://github.com/user-attachments/assets/8f92bba9-7830-4e61-ab80-3e192e0c5e87" />
+<img width="1095" height="670" alt="image" src="https://github.com/user-attachments/assets/1167fdee-00c0-4d3e-a36d-84c18fa36cc5" />
+<img width="1103" height="667" alt="image" src="https://github.com/user-attachments/assets/ab23089b-cd0b-41df-8b87-6361ae52bb3d" />
+
+
+
 ---
 
 # Step 12 — Rerun Pipeline After Infrastructure Fix
@@ -295,6 +306,9 @@ After the CloudFormation stack update completed:
 - Deploy stage: ✅ Success
 
 The deployment succeeded after the infrastructure fix and rerun.
+
+<img width="1091" height="665" alt="image" src="https://github.com/user-attachments/assets/42280742-8044-43b3-a048-23552fc02d79" />
+
 
 ---
 
